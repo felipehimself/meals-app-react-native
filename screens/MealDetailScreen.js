@@ -13,51 +13,57 @@ import Subtitle from '../components/Subtitle';
 import List from '../components/List';
 import IconBtn from '../components/IconBtn';
 
-function MealDetailScreen({ route, navigation }) {
-  const [meal, setMeal] = useState({});
-  const id = route.params.id;
+import { useGlobalContext } from '../store/context/favorite-context';
 
-  function headerButtonPressHandler() {
-    console.log('pressed');
+function MealDetailScreen({ route, navigation }) {
+  const id = route.params.id;
+  const selectedMeal = MEALS.find((meal) => meal.id == id);
+
+  const { ids, removeFav, addFav } = useGlobalContext();
+
+  const mealIsFav = ids.includes(id);
+
+  function changeFavStatus() {
+    if (mealIsFav) {
+      removeFav(id);
+    } else {
+      addFav(id);
+    }
   }
 
   useEffect(() => {
-    const selectedMeal = MEALS.find((meal) => meal.id == id);
-    setMeal(selectedMeal);
-
     navigation.setOptions({
       title: selectedMeal.title,
       headerRight: () => {
         return (
           <IconBtn
-            onPressAction={headerButtonPressHandler}
-            icon='star'
+            onPressAction={changeFavStatus}
+            icon={mealIsFav ? 'star' : 'star-outline'}
             color='red'
           />
         );
       },
     });
-  }, [route, id, navigation, headerButtonPressHandler]);
+  }, [navigation, changeFavStatus, mealIsFav]);
 
-  
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
-        <Image source={{ uri: meal?.imageUrl }} style={styles.image} />
-        <Text style={styles.title}>{meal.title}</Text>
+        <Image source={{ uri: selectedMeal?.imageUrl }} style={styles.image} />
+        <Text style={styles.title}>{selectedMeal.title}</Text>
         <MealDetail
-          duration={meal.duration}
-          complexity={meal.complexity}
-          affordability={meal.affordability}
+          duration={selectedMeal.duration}
+          complexity={selectedMeal.complexity}
+          affordability={selectedMeal.affordability}
           propStyle={styles.detailtext}
         />
 
         <View style={styles.listOuterContainer}>
           <View style={styles.listContainer}>
             <Subtitle>Ingredients</Subtitle>
-            <List data={meal.ingredients} />
+            <List data={selectedMeal.ingredients} />
             <Subtitle>Steps</Subtitle>
-            <List data={meal.steps} />
+            <List data={selectedMeal.steps} />
           </View>
         </View>
       </View>
