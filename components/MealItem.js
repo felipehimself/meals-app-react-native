@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Image, StyleSheet, ScrollView } from 'react-native';
 import { generateShadow } from '../globalStyles/styles';
 import { useNavigation } from '@react-navigation/native';
 import MealDetail from './MealDetail';

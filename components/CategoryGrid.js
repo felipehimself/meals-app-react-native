@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 
 function CategoryGrid({ title, color, id, onPressAction }) {
   
-  //também pode navegar para uma rota importando useNavigation
+  // também pode navegar para uma rota importando useNavigation
   // const nav = useNavigation();
     
 
